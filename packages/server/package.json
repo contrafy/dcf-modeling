@@ -15,17 +15,19 @@
   "dependencies": {
     "@tori/shared": "workspace:*",
     "express": "^5.0.0",
-    "socket.io": "^4.8.0",
     "ioredis": "^5.4.0",
     "neo4j-driver": "^5.27.0",
+    "socket.io": "^4.8.0",
+    "yahoo-finance2": "^3.14.0",
     "zod": "^3.24.0"
   },
   "devDependencies": {
-    "typescript": "^5.7.0",
-    "tsx": "^4.19.0",
-    "vitest": "^3.0.0",
     "@types/express": "^5.0.0",
+    "@types/supertest": "^6.0.0",
+    "msw": "^2.12.14",
     "supertest": "^7.0.0",
-    "@types/supertest": "^6.0.0"
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.0.0"
   }
 }
