@@ -11,8 +11,5 @@
     "test": "bun run --filter '*' test",
     "test:watch": "bun run --filter '*' test:watch",
     "lint": "bun run --filter '*' lint"
-  },
-  "engines": {
-    "node": ">=22.0.0"
   }
 }
