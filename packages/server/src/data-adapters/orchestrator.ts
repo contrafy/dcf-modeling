@@ -25,8 +25,8 @@ async function tryWithFallback<T>(
   if (primaryAvailable) {
     try {
       return await operation(primary)
-    } catch {
-      // primary failed at fetch time -- try fallback
+    } catch (err) {
+      console.warn(`[orchestrator] Primary adapter (${primary.name}) failed:`, err instanceof Error ? err.message : err)
     }
   }
 
@@ -37,7 +37,8 @@ async function tryWithFallback<T>(
 
   try {
     return await operation(fallback)
-  } catch {
+  } catch (err) {
+    console.error(`[orchestrator] Fallback adapter (${fallback.name}) also failed:`, err instanceof Error ? err.message : err)
     throw new Error("No financial data adapter available")
   }
 }

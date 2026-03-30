@@ -8,121 +8,64 @@ import type {
   MarketData,
 } from "./adapter-interface.js"
 
-type WithRaw<T> = { raw: T }
-
-type YahooIncomeStatement = {
-  readonly endDate: WithRaw<number>
-  readonly totalRevenue?: WithRaw<number>
-  readonly costOfRevenue?: WithRaw<number>
-  readonly grossProfit?: WithRaw<number>
-  readonly totalOperatingExpenses?: WithRaw<number>
-  readonly ebit?: WithRaw<number>
-  readonly interestExpense?: WithRaw<number>
-  readonly netIncome?: WithRaw<number>
-  readonly incomeTaxExpense?: WithRaw<number>
+function num(val: unknown, fallback = 0): number {
+  if (typeof val === "number" && !Number.isNaN(val)) return val
+  if (val && typeof val === "object" && "raw" in val) return num((val as { raw: unknown }).raw, fallback)
+  return fallback
 }
 
-type YahooBalanceSheet = {
-  readonly endDate: WithRaw<number>
-  readonly cash?: WithRaw<number>
-  readonly netReceivables?: WithRaw<number>
-  readonly inventory?: WithRaw<number>
-  readonly propertyPlantEquipment?: WithRaw<number>
-  readonly longTermDebt?: WithRaw<number>
-  readonly shortLongTermDebt?: WithRaw<number>
-  readonly accountsPayable?: WithRaw<number>
-  readonly totalAssets?: WithRaw<number>
-  readonly totalLiab?: WithRaw<number>
-  readonly totalStockholderEquity?: WithRaw<number>
+function fiscalYearFromDate(val: unknown): number {
+  if (val instanceof Date) return val.getFullYear()
+  if (typeof val === "number") return new Date(val * 1000).getFullYear()
+  if (typeof val === "string") return new Date(val).getFullYear()
+  return new Date().getFullYear()
 }
 
-type YahooCashFlow = {
-  readonly endDate: WithRaw<number>
-  readonly totalCashFromOperatingActivities?: WithRaw<number>
-  readonly capitalExpenditures?: WithRaw<number>
-  readonly freeCashFlow?: WithRaw<number>
-  readonly depreciation?: WithRaw<number>
-}
-
-type YahooQuoteSummary = {
-  readonly incomeStatementHistory?: {
-    readonly incomeStatementHistory: readonly YahooIncomeStatement[]
-  }
-  readonly balanceSheetHistory?: {
-    readonly balanceSheetStatements: readonly YahooBalanceSheet[]
-  }
-  readonly cashflowStatementHistory?: {
-    readonly cashflowStatements: readonly YahooCashFlow[]
-  }
-  readonly price?: {
-    readonly symbol: string
-    readonly shortName?: string
-    readonly regularMarketPrice?: WithRaw<number>
-    readonly marketCap?: WithRaw<number>
-    readonly sharesOutstanding?: WithRaw<number>
-    readonly beta?: WithRaw<number>
-    readonly fiftyTwoWeekHigh?: WithRaw<number>
-    readonly fiftyTwoWeekLow?: WithRaw<number>
-  }
-  readonly assetProfile?: {
-    readonly sector?: string
-    readonly country?: string
-  }
-}
-
-function rawVal(field: WithRaw<number> | undefined, fallback = 0): number {
-  return field?.raw ?? fallback
-}
-
-function fiscalYearFromTimestamp(ts: number): number {
-  return new Date(ts * 1000).getFullYear()
-}
-
-function mapIncomeStatement(record: YahooIncomeStatement): RawIncomeStatement {
+function mapIncomeStatement(record: Record<string, unknown>): RawIncomeStatement {
   return {
-    fiscalYear: fiscalYearFromTimestamp(record.endDate.raw),
-    revenue: rawVal(record.totalRevenue),
-    cogs: rawVal(record.costOfRevenue),
-    grossProfit: rawVal(record.grossProfit),
-    operatingExpenses: rawVal(record.totalOperatingExpenses),
-    ebitda: rawVal(record.ebit),
-    ebit: rawVal(record.ebit),
-    interestExpense: Math.abs(rawVal(record.interestExpense)),
-    netIncome: rawVal(record.netIncome),
-    taxProvision: rawVal(record.incomeTaxExpense),
+    fiscalYear: fiscalYearFromDate(record["endDate"]),
+    revenue: num(record["totalRevenue"]),
+    cogs: num(record["costOfRevenue"]),
+    grossProfit: num(record["grossProfit"]),
+    operatingExpenses: num(record["totalOperatingExpenses"]),
+    ebitda: num(record["ebitda"] ?? record["ebit"]),
+    ebit: num(record["ebit"]),
+    interestExpense: Math.abs(num(record["interestExpense"])),
+    netIncome: num(record["netIncome"]),
+    taxProvision: num(record["incomeTaxExpense"]),
   }
 }
 
-function mapBalanceSheet(record: YahooBalanceSheet): RawBalanceSheet {
-  const longTermDebt = rawVal(record.longTermDebt)
-  const shortTermDebt = rawVal(record.shortLongTermDebt)
+function mapBalanceSheet(record: Record<string, unknown>): RawBalanceSheet {
+  const longTermDebt = num(record["longTermDebt"])
+  const shortTermDebt = num(record["shortLongTermDebt"])
   return {
-    fiscalYear: fiscalYearFromTimestamp(record.endDate.raw),
-    cashAndEquivalents: rawVal(record.cash),
-    accountsReceivable: rawVal(record.netReceivables),
-    inventory: rawVal(record.inventory),
-    ppe: rawVal(record.propertyPlantEquipment),
+    fiscalYear: fiscalYearFromDate(record["endDate"]),
+    cashAndEquivalents: num(record["cash"] ?? record["cashAndCashEquivalents"]),
+    accountsReceivable: num(record["netReceivables"]),
+    inventory: num(record["inventory"]),
+    ppe: num(record["propertyPlantEquipment"]),
     totalDebt: longTermDebt + shortTermDebt,
-    accountsPayable: rawVal(record.accountsPayable),
-    totalAssets: rawVal(record.totalAssets),
-    totalLiabilities: rawVal(record.totalLiab),
-    totalEquity: rawVal(record.totalStockholderEquity),
+    accountsPayable: num(record["accountsPayable"]),
+    totalAssets: num(record["totalAssets"]),
+    totalLiabilities: num(record["totalLiab"] ?? record["totalLiabilities"]),
+    totalEquity: num(record["totalStockholderEquity"] ?? record["totalShareholderEquity"]),
   }
 }
 
-function mapCashFlow(record: YahooCashFlow): RawCashFlow {
+function mapCashFlow(record: Record<string, unknown>): RawCashFlow {
   return {
-    fiscalYear: fiscalYearFromTimestamp(record.endDate.raw),
-    operatingCashFlow: rawVal(record.totalCashFromOperatingActivities),
-    capex: Math.abs(rawVal(record.capitalExpenditures)),
-    freeCashFlow: rawVal(record.freeCashFlow),
-    da: rawVal(record.depreciation),
+    fiscalYear: fiscalYearFromDate(record["endDate"]),
+    operatingCashFlow: num(record["totalCashFromOperatingActivities"] ?? record["operatingCashflow"]),
+    capex: Math.abs(num(record["capitalExpenditures"])),
+    freeCashFlow: num(record["freeCashFlow"]),
+    da: num(record["depreciation"] ?? record["depreciationAndAmortization"]),
   }
 }
 
 function createYahooAdapter(): FinancialDataAdapter {
   async function fetchFinancials(ticker: string, years: number): Promise<RawFinancials> {
-    const summary = (await yahooFinance.quoteSummary(ticker, {
+    const summary = await yahooFinance.quoteSummary(ticker, {
       modules: [
         "incomeStatementHistory",
         "balanceSheetHistory",
@@ -130,17 +73,23 @@ function createYahooAdapter(): FinancialDataAdapter {
         "price",
         "assetProfile",
       ],
-    })) as YahooQuoteSummary
+    }) as Record<string, unknown>
 
-    const incomeRaw = summary.incomeStatementHistory?.incomeStatementHistory ?? []
-    const balanceRaw = summary.balanceSheetHistory?.balanceSheetStatements ?? []
-    const cashRaw = summary.cashflowStatementHistory?.cashflowStatements ?? []
+    const incomeHistory = summary["incomeStatementHistory"] as Record<string, unknown> | undefined
+    const balanceHistory = summary["balanceSheetHistory"] as Record<string, unknown> | undefined
+    const cashHistory = summary["cashflowStatementHistory"] as Record<string, unknown> | undefined
+    const price = summary["price"] as Record<string, unknown> | undefined
+    const profile = summary["assetProfile"] as Record<string, unknown> | undefined
+
+    const incomeRaw = (incomeHistory?.["incomeStatementHistory"] ?? []) as Record<string, unknown>[]
+    const balanceRaw = (balanceHistory?.["balanceSheetStatements"] ?? []) as Record<string, unknown>[]
+    const cashRaw = (cashHistory?.["cashflowStatements"] ?? []) as Record<string, unknown>[]
 
     return {
       ticker,
-      companyName: summary.price?.shortName ?? ticker,
-      sector: summary.assetProfile?.sector ?? "Unknown",
-      country: summary.assetProfile?.country ?? "Unknown",
+      companyName: String(price?.["shortName"] ?? price?.["longName"] ?? ticker),
+      sector: String(profile?.["sector"] ?? "Unknown"),
+      country: String(profile?.["country"] ?? "Unknown"),
       incomeStatements: incomeRaw.slice(0, years).map(mapIncomeStatement),
       balanceSheets: balanceRaw.slice(0, years).map(mapBalanceSheet),
       cashFlows: cashRaw.slice(0, years).map(mapCashFlow),
@@ -148,20 +97,20 @@ function createYahooAdapter(): FinancialDataAdapter {
   }
 
   async function fetchMarketData(ticker: string): Promise<MarketData> {
-    const summary = (await yahooFinance.quoteSummary(ticker, {
+    const summary = await yahooFinance.quoteSummary(ticker, {
       modules: ["price"],
-    })) as YahooQuoteSummary
+    }) as Record<string, unknown>
 
-    const price = summary.price
+    const price = summary["price"] as Record<string, unknown> | undefined
 
     return {
       ticker,
-      price: rawVal(price?.regularMarketPrice),
-      marketCap: rawVal(price?.marketCap),
-      sharesOutstanding: rawVal(price?.sharesOutstanding),
-      beta: rawVal(price?.beta),
-      fiftyTwoWeekHigh: rawVal(price?.fiftyTwoWeekHigh),
-      fiftyTwoWeekLow: rawVal(price?.fiftyTwoWeekLow),
+      price: num(price?.["regularMarketPrice"]),
+      marketCap: num(price?.["marketCap"]),
+      sharesOutstanding: num(price?.["sharesOutstanding"]),
+      beta: num(price?.["beta"]),
+      fiftyTwoWeekHigh: num(price?.["fiftyTwoWeekHigh"]),
+      fiftyTwoWeekLow: num(price?.["fiftyTwoWeekLow"]),
       lastUpdated: new Date().toISOString(),
     }
   }

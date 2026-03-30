@@ -21,6 +21,7 @@ function createDataRouter(orchestrator: DataAdapterOrchestrator): IRouter {
       res.json(result)
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err)
+      console.error(`[data-router] Failed to fetch data for ${ticker}:`, err)
       res.status(500).json({ error: `Failed to fetch data for ${ticker}: ${message}` })
     }
   })
