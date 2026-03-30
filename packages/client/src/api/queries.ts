@@ -99,8 +99,13 @@ function useRunSimulation() {
 }
 
 function useFetchFinancialData() {
+  const qc = useQueryClient()
   return useMutation({
     mutationFn: (ticker: string) => apiPost(`/data/fetch/${ticker}`),
+    onSuccess: (_d, ticker) => {
+      qc.invalidateQueries({ queryKey: ["graph"] })
+      qc.invalidateQueries({ queryKey: ["financials", ticker] })
+    },
   })
 }
 

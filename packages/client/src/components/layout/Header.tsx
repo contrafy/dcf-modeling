@@ -1,6 +1,6 @@
 import { useScenarioStore } from "../../stores/scenario-store.js"
 import { useSimulationStore } from "../../stores/simulation-store.js"
-import { useRunSimulation, useAddCompany } from "../../api/queries.js"
+import { useRunSimulation, useAddCompany, useFetchFinancialData } from "../../api/queries.js"
 import { SearchBar } from "../shared/SearchBar.js"
 import type { ShockImpact } from "../../stores/simulation-store.js"
 
@@ -9,6 +9,7 @@ function Header() {
   const { isRunning, setImpacts, setRunning, setConverged } = useSimulationStore()
   const runSim = useRunSimulation()
   const addCompany = useAddCompany()
+  const fetchData = useFetchFinancialData()
 
   function handleRunShock() {
     if (!activeScenarioId) return
@@ -29,13 +30,14 @@ function Header() {
   }
 
   function handleSearch(ticker: string) {
-    addCompany.mutate({
-      ticker,
-      name: ticker,
-      sector: "Unknown",
-      country: "Unknown",
-      marketCap: 0,
-    })
+    addCompany.mutate(
+      { ticker, name: ticker, sector: "Unknown", country: "Unknown", marketCap: 0 },
+      {
+        onSuccess: () => {
+          fetchData.mutate(ticker)
+        },
+      },
+    )
   }
 
   return (
