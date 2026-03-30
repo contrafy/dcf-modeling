@@ -52,7 +52,7 @@ function Header() {
           className="text-xl font-bold tracking-widest"
           style={{ fontFamily: "var(--font-display)", color: "var(--color-neon-cyan)" }}
         >
-          TORI
+          DCF
         </h1>
         <span className="text-xs" style={{ color: "var(--color-text-muted)", fontFamily: "var(--font-body)" }}>
           Supply Chain DCF
