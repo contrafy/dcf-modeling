@@ -83,7 +83,7 @@ async function deleteCompany(
 ): Promise<void> {
   const session = connection.session()
   try {
-    await session.run(`MATCH (c:Company { ticker: $ticker }) DELETE c`, { ticker })
+    await session.run(`MATCH (c:Company { ticker: $ticker }) DETACH DELETE c`, { ticker })
   } finally {
     await session.close()
   }
