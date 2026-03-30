@@ -1,0 +1,14 @@
+{
+  "name": "tori-project",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --filter @tori/server dev",
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "test:watch": "pnpm -r test:watch",
+    "lint": "pnpm -r lint"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  }
+}
