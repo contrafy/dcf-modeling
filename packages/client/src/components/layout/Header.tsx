@@ -1,11 +1,42 @@
 import { useScenarioStore } from "../../stores/scenario-store.js"
 import { useSimulationStore } from "../../stores/simulation-store.js"
-import { useRunSimulation } from "../../api/queries.js"
+import { useRunSimulation, useAddCompany } from "../../api/queries.js"
+import { SearchBar } from "../shared/SearchBar.js"
+import type { ShockImpact } from "../../stores/simulation-store.js"
 
 function Header() {
   const { scenarios, activeScenarioId, setActiveScenario } = useScenarioStore()
-  const { isRunning } = useSimulationStore()
+  const { isRunning, setImpacts, setRunning, setConverged } = useSimulationStore()
   const runSim = useRunSimulation()
+  const addCompany = useAddCompany()
+
+  function handleRunShock() {
+    if (!activeScenarioId) return
+    setRunning(true)
+    runSim.mutate(activeScenarioId, {
+      onSuccess: (data: unknown) => {
+        const result = data as { impacts?: ShockImpact[] }
+        if (result?.impacts) {
+          setImpacts(result.impacts)
+          setConverged(true)
+        }
+        setRunning(false)
+      },
+      onError: () => {
+        setRunning(false)
+      },
+    })
+  }
+
+  function handleSearch(ticker: string) {
+    addCompany.mutate({
+      ticker,
+      name: ticker,
+      sector: "Unknown",
+      country: "Unknown",
+      marketCap: 0,
+    })
+  }
 
   return (
     <header
@@ -28,6 +59,10 @@ function Header() {
         </span>
       </div>
 
+      <div className="flex items-center gap-4 flex-1 max-w-sm mx-6">
+        <SearchBar onSearch={handleSearch} placeholder="Add company by ticker..." />
+      </div>
+
       <div className="flex items-center gap-4">
         <select
           value={activeScenarioId ?? ""}
@@ -47,7 +82,7 @@ function Header() {
         </select>
 
         <button
-          onClick={() => activeScenarioId && runSim.mutate(activeScenarioId)}
+          onClick={handleRunShock}
           disabled={!activeScenarioId || isRunning}
           className="rounded-lg px-4 py-1.5 text-sm font-medium transition-all disabled:opacity-30"
           style={{
