@@ -39,7 +39,8 @@ function NodeDetail() {
   }
 
   const impact = impacts.find((i) => i.ticker === selectedTicker)
-  const fin = financials as Record<string, unknown> | undefined
+  const raw = financials as { drivers?: Record<string, number>; fiscalYear?: number } | undefined
+  const d = raw?.drivers
 
   return (
     <div className="p-4 space-y-3">
@@ -103,13 +104,44 @@ function NodeDetail() {
         </Card>
       )}
 
-      {fin && (
-        <Card>
-          <div className="text-xs mb-2" style={{ color: "var(--color-text-muted)" }}>Financial Summary</div>
-          <StatRow label="Revenue" value={formatCurrency(Number(fin["revenue"] ?? 0))} />
-          <StatRow label="WACC" value={`${(Number(fin["wacc"] ?? 0) * 100).toFixed(1)}%`} />
-          <StatRow label="Growth" value={`${(Number(fin["revenueGrowthRate"] ?? 0) * 100).toFixed(1)}%`} />
-        </Card>
+      {d && (
+        <>
+          <Card>
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-xs" style={{ color: "var(--color-text-muted)" }}>Income Statement Drivers</span>
+              {raw?.fiscalYear && (
+                <span className="text-xs" style={{ color: "var(--color-text-muted)", fontFamily: "var(--font-mono)" }}>FY{raw.fiscalYear}</span>
+              )}
+            </div>
+            <StatRow label="Revenue" value={formatCurrency(d["revenue"] ?? 0)} />
+            <StatRow label="COGS %" value={`${((d["cogsPercent"] ?? 0) * 100).toFixed(1)}%`} />
+            <StatRow label="SGA %" value={`${((d["sgaPercent"] ?? 0) * 100).toFixed(1)}%`} />
+            <StatRow label="R&D %" value={`${((d["rdPercent"] ?? 0) * 100).toFixed(1)}%`} />
+            <StatRow label="D&A %" value={`${((d["daPercent"] ?? 0) * 100).toFixed(1)}%`} />
+            <StatRow label="Interest Exp" value={formatCurrency(d["interestExpense"] ?? 0)} />
+            <StatRow label="Tax Rate" value={`${((d["taxRate"] ?? 0) * 100).toFixed(1)}%`} />
+          </Card>
+
+          <Card>
+            <div className="text-xs mb-2" style={{ color: "var(--color-text-muted)" }}>Balance Sheet</div>
+            <StatRow label="Cash" value={formatCurrency(d["cashAndEquivalents"] ?? 0)} />
+            <StatRow label="Receivables" value={formatCurrency(d["accountsReceivable"] ?? 0)} />
+            <StatRow label="Inventory" value={formatCurrency(d["inventory"] ?? 0)} />
+            <StatRow label="PP&E" value={formatCurrency(d["ppe"] ?? 0)} />
+            <StatRow label="Total Debt" value={formatCurrency(d["totalDebt"] ?? 0)} />
+            <StatRow label="Payables" value={formatCurrency(d["accountsPayable"] ?? 0)} />
+          </Card>
+
+          <Card>
+            <div className="text-xs mb-2" style={{ color: "var(--color-text-muted)" }}>DCF Parameters</div>
+            <StatRow label="Growth Rate" value={`${((d["revenueGrowthRate"] ?? 0) * 100).toFixed(1)}%`} />
+            <StatRow label="WACC" value={`${((d["wacc"] ?? 0) * 100).toFixed(1)}%`} />
+            <StatRow label="Terminal Growth" value={`${((d["terminalGrowthRate"] ?? 0) * 100).toFixed(1)}%`} />
+            <StatRow label="CapEx %" value={`${((d["capexPercent"] ?? 0) * 100).toFixed(1)}%`} />
+            <StatRow label="Projection Yrs" value={`${d["projectionYears"] ?? 5}`} />
+            <StatRow label="Shares Out" value={(d["sharesOutstanding"] ?? 0).toLocaleString()} />
+          </Card>
+        </>
       )}
     </div>
   )

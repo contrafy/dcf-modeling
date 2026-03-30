@@ -106,11 +106,16 @@ function createYahooAdapter(): FinancialDataAdapter {
 
     const price = summary["price"] as Record<string, unknown> | undefined
 
+    const mktPrice = num(price?.["regularMarketPrice"])
+    const mktCap = num(price?.["marketCap"])
+    const reportedShares = num(price?.["sharesOutstanding"])
+    const derivedShares = mktPrice > 0 ? Math.round(mktCap / mktPrice) : 0
+
     return {
       ticker,
-      price: num(price?.["regularMarketPrice"]),
-      marketCap: num(price?.["marketCap"]),
-      sharesOutstanding: num(price?.["sharesOutstanding"]),
+      price: mktPrice,
+      marketCap: mktCap,
+      sharesOutstanding: reportedShares > 0 ? reportedShares : derivedShares,
       beta: num(price?.["beta"]),
       fiftyTwoWeekHigh: num(price?.["fiftyTwoWeekHigh"]),
       fiftyTwoWeekLow: num(price?.["fiftyTwoWeekLow"]),
