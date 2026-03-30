@@ -1,4 +1,4 @@
-import yahooFinance from "yahoo-finance2"
+import YahooFinance from "yahoo-finance2"
 import type {
   FinancialDataAdapter,
   RawFinancials,
@@ -7,6 +7,8 @@ import type {
   RawCashFlow,
   MarketData,
 } from "./adapter-interface.js"
+
+const yf = new YahooFinance({ suppressNotices: ["yahooSurvey"] })
 
 function num(val: unknown, fallback = 0): number {
   if (typeof val === "number" && !Number.isNaN(val)) return val
@@ -65,7 +67,7 @@ function mapCashFlow(record: Record<string, unknown>): RawCashFlow {
 
 function createYahooAdapter(): FinancialDataAdapter {
   async function fetchFinancials(ticker: string, years: number): Promise<RawFinancials> {
-    const summary = await yahooFinance.quoteSummary(ticker, {
+    const summary = await yf.quoteSummary(ticker, {
       modules: [
         "incomeStatementHistory",
         "balanceSheetHistory",
@@ -97,7 +99,7 @@ function createYahooAdapter(): FinancialDataAdapter {
   }
 
   async function fetchMarketData(ticker: string): Promise<MarketData> {
-    const summary = await yahooFinance.quoteSummary(ticker, {
+    const summary = await yf.quoteSummary(ticker, {
       modules: ["price"],
     }) as Record<string, unknown>
 
@@ -117,7 +119,7 @@ function createYahooAdapter(): FinancialDataAdapter {
 
   async function isAvailable(): Promise<boolean> {
     try {
-      await yahooFinance.quoteSummary("AAPL", { modules: ["price"] })
+      await yf.quoteSummary("AAPL", { modules: ["price"] })
       return true
     } catch {
       return false
