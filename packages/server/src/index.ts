@@ -1,6 +1,7 @@
 import express, { type Express } from "express"
 import { createServer } from "node:http"
 import { Server } from "socket.io"
+import { healthRouter } from "./api/health.js"
 
 const app: Express = express()
 const httpServer = createServer(app)
@@ -9,10 +10,7 @@ const io = new Server(httpServer, {
 })
 
 app.use(express.json())
-
-app.get("/api/health", (_req, res) => {
-  res.json({ status: "ok" })
-})
+app.use("/api", healthRouter)
 
 io.on("connection", (socket) => {
   console.log(`Client connected: ${socket.id}`)
