@@ -29,7 +29,7 @@ function createScenarioRouter(repo: ScenarioRepository): IRouter {
   )
 
   router.get("/:id", async (req, res) => {
-    const id = req.params["id"]!
+    const id = String(req.params["id"])
     const scenario = await repo.getScenario(id)
     if (scenario === null) {
       res.status(404).json({ error: `Scenario ${id} not found` })
@@ -42,15 +42,15 @@ function createScenarioRouter(repo: ScenarioRepository): IRouter {
     "/:id/policies",
     validateBody(CreateTariffPolicySchema),
     async (req, res) => {
-      const scenarioId = req.params["id"]!
+      const scenarioId = String(req.params["id"])
       const policy = await repo.addPolicy(scenarioId, req.body)
       res.status(201).json(policy)
     },
   )
 
   router.delete("/:id/policies/:pid", async (req, res) => {
-    const scenarioId = req.params["id"]!
-    const policyId = req.params["pid"]!
+    const scenarioId = String(req.params["id"])
+    const policyId = String(req.params["pid"])
     await repo.removePolicy(scenarioId, policyId)
     res.status(204).send()
   })

@@ -36,7 +36,7 @@ function createGraphRouter(repo: GraphRepository, ws: SocketHandler): IRouter {
   )
 
   router.delete("/companies/:ticker", async (req, res) => {
-    await repo.removeCompany(req.params["ticker"]!)
+    await repo.removeCompany(String(req.params["ticker"]))
     const graph = await repo.getGraph()
     ws.emitGraphUpdated({ nodes: graph.nodes, edges: graph.edges })
     res.status(204).send()
@@ -54,7 +54,7 @@ function createGraphRouter(repo: GraphRepository, ws: SocketHandler): IRouter {
   )
 
   router.delete("/edges/:id", async (req, res) => {
-    await repo.removeEdge(req.params["id"]!)
+    await repo.removeEdge(String(req.params["id"]))
     const graph = await repo.getGraph()
     ws.emitGraphUpdated({ nodes: graph.nodes, edges: graph.edges })
     res.status(204).send()
@@ -64,7 +64,7 @@ function createGraphRouter(repo: GraphRepository, ws: SocketHandler): IRouter {
     "/edges/:id",
     validateBody(UpdateSupplyEdgeSchema),
     async (req, res) => {
-      const id = req.params["id"]!
+      const id = String(req.params["id"])
       const edge = await repo.updateEdge(id, req.body)
       ws.emitEdgeUpdated(id, { edgeId: id, data: edge })
       res.json(edge)

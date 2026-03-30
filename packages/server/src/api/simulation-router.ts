@@ -23,7 +23,7 @@ function createSimulationRouter(service: SimulationService, ws: SocketHandler): 
   const router = Router()
 
   router.post("/:scenarioId", async (req, res) => {
-    const scenarioId = req.params["scenarioId"]!
+    const scenarioId = String(req.params["scenarioId"])
     const jobId = randomUUID()
 
     ws.emitSimulationStarted({ scenarioId, jobId })

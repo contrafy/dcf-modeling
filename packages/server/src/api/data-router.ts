@@ -15,7 +15,7 @@ function createDataRouter(orchestrator: DataAdapterOrchestrator): IRouter {
   const router = Router()
 
   router.post("/fetch/:ticker", async (req, res) => {
-    const ticker = req.params["ticker"]!
+    const ticker = String(req.params["ticker"])
     try {
       const result = await orchestrator.fetchAndStore(ticker)
       res.json(result)

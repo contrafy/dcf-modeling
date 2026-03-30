@@ -27,7 +27,7 @@ type ExtractionService = {
     ticker: string,
     onProgress: (status: string, message: string) => void,
   ) => Promise<ExtractionResult>
-  approveExtraction: (extractionId: string, approvedIds: string[]) => Promise<void>
+  approveExtraction: (extractionId: string, approvedIds: readonly string[]) => Promise<void>
 }
 
 function makeExtractionResult(): ExtractionResult {

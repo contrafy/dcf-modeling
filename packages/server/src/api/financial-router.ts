@@ -14,7 +14,7 @@ function createFinancialRouter(repo: FinancialRepository, ws: SocketHandler): IR
   const router = Router()
 
   router.get("/:ticker/financials", async (req, res) => {
-    const ticker = req.params["ticker"]!
+    const ticker = String(req.params["ticker"])
     const model = await repo.getFinancials(ticker)
     if (model === null) {
       res.status(404).json({ error: `Financial model for ${ticker} not found` })
@@ -27,7 +27,7 @@ function createFinancialRouter(repo: FinancialRepository, ws: SocketHandler): IR
     "/:ticker/financials",
     validateBody(UpdateFinancialModelSchema),
     async (req, res) => {
-      const ticker = req.params["ticker"]!
+      const ticker = String(req.params["ticker"])
       const model = await repo.updateFinancials(ticker, req.body)
       ws.emitNodeUpdated(ticker, { ticker, data: model })
       res.json(model)
@@ -35,7 +35,7 @@ function createFinancialRouter(repo: FinancialRepository, ws: SocketHandler): IR
   )
 
   router.post("/:ticker/dcf", async (req, res) => {
-    const ticker = req.params["ticker"]!
+    const ticker = String(req.params["ticker"])
     const result = await repo.recalculateDCF(ticker)
     ws.emitDCFRecalculated({
       ticker,
