@@ -15,11 +15,12 @@ function SupplyChainGraph() {
   const { impacts } = useSimulationStore()
 
   useEffect(() => {
-    const svg = d3.select(svgRef.current)
     if (!svgRef.current) return
+    const svgEl = svgRef.current
+    const svg = d3.select(svgEl) as d3.Selection<SVGSVGElement, unknown, null, undefined>
 
-    const width = svgRef.current.clientWidth
-    const height = svgRef.current.clientHeight
+    const width = svgEl.clientWidth
+    const height = svgEl.clientHeight
 
     svg.selectAll("*").remove()
 
@@ -64,7 +65,7 @@ function SupplyChainGraph() {
       .attr("stroke-width", (d) => 1 + d.edge.revenueWeight * 3)
       .attr("filter", "url(#glow)")
 
-    const nodeCircles = nodeGroup.selectAll("circle")
+    const nodeCirclesBase = nodeGroup.selectAll<SVGCircleElement, SimNode>("circle")
       .data(simNodes)
       .join("circle")
       .attr("r", 20)
@@ -74,22 +75,25 @@ function SupplyChainGraph() {
       .attr("filter", "url(#glow)")
       .attr("cursor", "pointer")
       .on("click", (_event, d) => selectNode(d.ticker))
-      .call(d3.drag<SVGCircleElement, SimNode>()
-        .on("start", (event, d) => {
-          if (!event.active) simulation.alphaTarget(0.3).restart()
-          d.fx = d.x
-          d.fy = d.y
-        })
-        .on("drag", (event, d) => {
-          d.fx = event.x
-          d.fy = event.y
-        })
-        .on("end", (event, d) => {
-          if (!event.active) simulation.alphaTarget(0)
-          d.fx = null
-          d.fy = null
-        })
-      )
+
+    nodeCirclesBase.call(d3.drag<SVGCircleElement, SimNode>()
+      .on("start", (event, d) => {
+        if (!event.active) simulation.alphaTarget(0.3).restart()
+        d.fx = d.x
+        d.fy = d.y
+      })
+      .on("drag", (event, d) => {
+        d.fx = event.x
+        d.fy = event.y
+      })
+      .on("end", (event, d) => {
+        if (!event.active) simulation.alphaTarget(0)
+        d.fx = null
+        d.fy = null
+      })
+    )
+
+    const nodeCircles = nodeCirclesBase
 
     const labels = labelGroup.selectAll("text")
       .data(simNodes)

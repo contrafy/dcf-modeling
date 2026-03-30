@@ -17,10 +17,11 @@ function apiGet<T>(path: string): Promise<T> {
 }
 
 function apiPost<T>(path: string, body?: unknown): Promise<T> {
-  return apiFetch<T>(path, {
-    method: "POST",
-    body: body ? JSON.stringify(body) : undefined,
-  })
+  const init: RequestInit = { method: "POST" }
+  if (body !== undefined) {
+    init.body = JSON.stringify(body)
+  }
+  return apiFetch<T>(path, init)
 }
 
 function apiPut<T>(path: string, body: unknown): Promise<T> {

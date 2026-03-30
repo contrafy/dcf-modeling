@@ -29,7 +29,7 @@ function PortfolioSummary() {
       <MetricCard
         label="Most At-Risk"
         value={mostAtRisk?.ticker ?? "--"}
-        delta={mostAtRisk?.percentChange}
+        {...(mostAtRisk !== null && mostAtRisk !== undefined ? { delta: mostAtRisk.percentChange } : {})}
         glowColor="var(--color-neon-red)"
       />
       <MetricCard
