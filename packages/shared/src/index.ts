@@ -33,3 +33,18 @@ export type {
   SimulationResult,
   PropagationStep,
 } from "./types/dcf.js"
+
+export {
+  CompanySchema,
+  CreateCompanySchema,
+  FinancialModelDriversSchema,
+  FinancialModelSchema,
+  UpdateFinancialModelSchema,
+  SupplyEdgeSchema,
+  CreateSupplyEdgeSchema,
+  UpdateSupplyEdgeSchema,
+  TariffPolicySchema,
+  CreateTariffPolicySchema,
+  ScenarioSchema,
+  CreateScenarioSchema,
+} from "./schemas/index.js"
