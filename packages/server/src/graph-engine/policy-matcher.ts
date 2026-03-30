@@ -1,4 +1,4 @@
-import type { SupplyEdge, TariffPolicy, SupplyChainGraph } from "@tori/shared"
+import type { SupplyEdge, TariffPolicy, SupplyChainGraph } from "@dcf-modeling/shared"
 
 function matchAffectedEdges(graph: SupplyChainGraph, policy: TariffPolicy): readonly SupplyEdge[] {
   if (policy.affectedEdgeIds.length > 0) {

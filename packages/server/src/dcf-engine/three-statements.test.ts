@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest"
 import { deriveThreeStatements } from "./three-statements.js"
-import type { FinancialModelDrivers } from "@tori/shared"
+import type { FinancialModelDrivers } from "@dcf-modeling/shared"
 
 function makeDrivers(overrides: Partial<FinancialModelDrivers> = {}): FinancialModelDrivers {
   return {

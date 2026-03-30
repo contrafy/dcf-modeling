@@ -1,4 +1,4 @@
-import type { FinancialModelDrivers, IncomeStatement } from "@tori/shared"
+import type { FinancialModelDrivers, IncomeStatement } from "@dcf-modeling/shared"
 
 function deriveIncomeStatement(drivers: FinancialModelDrivers): IncomeStatement {
   const revenue = drivers.revenue

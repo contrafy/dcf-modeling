@@ -1,4 +1,4 @@
-import type { FinancialModelDrivers, DCFResult } from "@tori/shared"
+import type { FinancialModelDrivers, DCFResult } from "@dcf-modeling/shared"
 import { deriveThreeStatements } from "./three-statements.js"
 
 function calculateDCF(drivers: FinancialModelDrivers): DCFResult {

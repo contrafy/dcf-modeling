@@ -1,4 +1,4 @@
-import type { FinancialModel, FinancialModelDrivers } from "@tori/shared"
+import type { FinancialModel, FinancialModelDrivers } from "@dcf-modeling/shared"
 import type { Neo4jConnection } from "./connection.js"
 
 async function upsertFinancialModel(

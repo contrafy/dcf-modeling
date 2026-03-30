@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from "vitest"
 import request from "supertest"
 import express, { type Express } from "express"
 import { createScenarioRouter } from "./scenario-router.js"
-import type { Scenario, TariffPolicy } from "@tori/shared"
+import type { Scenario, TariffPolicy } from "@dcf-modeling/shared"
 
 type ScenarioRepository = {
   listScenarios: () => Promise<Scenario[]>

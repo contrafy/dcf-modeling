@@ -13,7 +13,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/packages/shared/node_modules ./packages/shared/node_modules
 COPY --from=deps /app/packages/server/node_modules ./packages/server/node_modules
 COPY . .
-RUN pnpm --filter @tori/shared build && pnpm --filter @tori/server build
+RUN pnpm --filter @dcf-modeling/shared build && pnpm --filter @dcf-modeling/server build
 
 FROM base AS production
 COPY --from=deps /app/node_modules ./node_modules

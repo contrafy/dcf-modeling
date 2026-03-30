@@ -1,4 +1,4 @@
-import type { CompanyNode, SupplyEdge, SupplyChainGraph } from "@tori/shared"
+import type { CompanyNode, SupplyEdge, SupplyChainGraph } from "@dcf-modeling/shared"
 
 function buildAdjacency(edges: readonly SupplyEdge[]): ReadonlyMap<string, readonly SupplyEdge[]> {
   const adj = new Map<string, SupplyEdge[]>()

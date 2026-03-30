@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest"
 import { matchAffectedEdges } from "./policy-matcher.js"
-import type { SupplyEdge, TariffPolicy, CompanyNode } from "@tori/shared"
+import type { SupplyEdge, TariffPolicy, CompanyNode } from "@dcf-modeling/shared"
 import { createGraph, addNode, addEdge } from "./graph.js"
 
 function makeNode(ticker: string, country: string): CompanyNode {

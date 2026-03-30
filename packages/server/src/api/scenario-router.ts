@@ -1,6 +1,6 @@
 import { Router, type IRouter } from "express"
-import type { Scenario, TariffPolicy } from "@tori/shared"
-import { CreateScenarioSchema, CreateTariffPolicySchema } from "@tori/shared"
+import type { Scenario, TariffPolicy } from "@dcf-modeling/shared"
+import { CreateScenarioSchema, CreateTariffPolicySchema } from "@dcf-modeling/shared"
 import { validateBody } from "./validation.js"
 
 type ScenarioRepository = {

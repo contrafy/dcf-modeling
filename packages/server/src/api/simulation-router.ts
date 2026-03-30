@@ -1,5 +1,5 @@
 import { Router, type IRouter } from "express"
-import type { SimulationResult, PropagationStep } from "@tori/shared"
+import type { SimulationResult, PropagationStep } from "@dcf-modeling/shared"
 import type { SocketHandler } from "../websocket/socket-handler.js"
 import { randomUUID } from "node:crypto"
 

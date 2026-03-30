@@ -3,7 +3,7 @@ import request from "supertest"
 import express, { type Express } from "express"
 import { createFinancialRouter } from "./financial-router.js"
 import type { SocketHandler } from "../websocket/socket-handler.js"
-import type { FinancialModel, DCFResult } from "@tori/shared"
+import type { FinancialModel, DCFResult } from "@dcf-modeling/shared"
 
 type FinancialRepository = {
   getFinancials: (ticker: string) => Promise<FinancialModel | null>

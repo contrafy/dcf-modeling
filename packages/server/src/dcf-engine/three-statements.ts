@@ -1,4 +1,4 @@
-import type { FinancialModelDrivers, ThreeStatementOutput } from "@tori/shared"
+import type { FinancialModelDrivers, ThreeStatementOutput } from "@dcf-modeling/shared"
 import { deriveIncomeStatement } from "./income-statement.js"
 import { deriveBalanceSheet } from "./balance-sheet.js"
 import { deriveCashFlow } from "./cash-flow.js"

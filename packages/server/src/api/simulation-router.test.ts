@@ -3,7 +3,7 @@ import request from "supertest"
 import express, { type Express } from "express"
 import { createSimulationRouter } from "./simulation-router.js"
 import type { SocketHandler } from "../websocket/socket-handler.js"
-import type { SimulationResult, ShockImpact, PropagationStep } from "@tori/shared"
+import type { SimulationResult, ShockImpact, PropagationStep } from "@dcf-modeling/shared"
 
 type SimulationService = {
   runSimulation: (

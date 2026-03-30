@@ -83,7 +83,7 @@ function cleanCik(cik: string): string {
 
 async function fetchText(url: string): Promise<string> {
   const response = await fetch(url, {
-    headers: { "User-Agent": "tori-project research@example.com" },
+    headers: { "User-Agent": "dcf-modeling research@example.com" },
   })
   if (!response.ok) {
     throw new Error(`EDGAR request failed: ${response.status} ${url}`)
@@ -93,7 +93,7 @@ async function fetchText(url: string): Promise<string> {
 
 async function fetchJson<T>(url: string): Promise<T> {
   const response = await fetch(url, {
-    headers: { "User-Agent": "tori-project research@example.com" },
+    headers: { "User-Agent": "dcf-modeling research@example.com" },
   })
   if (!response.ok) {
     throw new Error(`EDGAR request failed: ${response.status} ${url}`)

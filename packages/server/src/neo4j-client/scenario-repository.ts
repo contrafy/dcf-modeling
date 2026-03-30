@@ -1,4 +1,4 @@
-import type { Scenario, TariffPolicy } from "@tori/shared"
+import type { Scenario, TariffPolicy } from "@dcf-modeling/shared"
 import type { Neo4jConnection } from "./connection.js"
 
 function recordToPolicy(p: Record<string, unknown>): TariffPolicy {

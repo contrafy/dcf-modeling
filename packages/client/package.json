@@ -1,5 +1,5 @@
 {
-  "name": "@tori/client",
+  "name": "@dcf-modeling/client",
   "version": "0.0.1",
   "private": true,
   "type": "module",
@@ -12,7 +12,7 @@
     "lint": "tsc --noEmit"
   },
   "dependencies": {
-    "@tori/shared": "workspace:*",
+    "@dcf-modeling/shared": "workspace:*",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "socket.io-client": "^4.8.0",

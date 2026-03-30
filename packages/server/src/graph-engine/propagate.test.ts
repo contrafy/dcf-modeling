@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest"
 import { propagateShock } from "./propagate.js"
 import { createGraph, addNode, addEdge } from "./graph.js"
-import type { CompanyNode, SupplyEdge, TariffPolicy, FinancialModelDrivers } from "@tori/shared"
+import type { CompanyNode, SupplyEdge, TariffPolicy, FinancialModelDrivers } from "@dcf-modeling/shared"
 
 function makeDrivers(overrides: Partial<FinancialModelDrivers> = {}): FinancialModelDrivers {
   return {

@@ -1,4 +1,4 @@
-import type { FinancialModelDrivers } from "@tori/shared"
+import type { FinancialModelDrivers } from "@dcf-modeling/shared"
 
 function mergeDrivers(
   base: FinancialModelDrivers,

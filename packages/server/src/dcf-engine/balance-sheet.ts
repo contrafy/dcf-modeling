@@ -1,4 +1,4 @@
-import type { FinancialModelDrivers, IncomeStatement, BalanceSheet } from "@tori/shared"
+import type { FinancialModelDrivers, IncomeStatement, BalanceSheet } from "@dcf-modeling/shared"
 
 function deriveBalanceSheet(drivers: FinancialModelDrivers, _income: IncomeStatement): BalanceSheet {
   const cashAndEquivalents = drivers.cashAndEquivalents

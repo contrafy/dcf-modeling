@@ -9,7 +9,7 @@ import {
   findPoliciesForScenario,
   deleteTariffPolicy,
 } from "./scenario-repository.js"
-import type { Scenario, TariffPolicy } from "@tori/shared"
+import type { Scenario, TariffPolicy } from "@dcf-modeling/shared"
 import type { Neo4jConnection } from "./connection.js"
 
 const TEST_URI = process.env["NEO4J_URI"] ?? "bolt://localhost:7687"

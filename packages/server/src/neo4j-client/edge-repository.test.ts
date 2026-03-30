@@ -10,7 +10,7 @@ import {
   deleteEdge,
   listAllEdges,
 } from "./edge-repository.js"
-import type { Company, SupplyEdge } from "@tori/shared"
+import type { Company, SupplyEdge } from "@dcf-modeling/shared"
 import type { Neo4jConnection } from "./connection.js"
 
 const TEST_URI = process.env["NEO4J_URI"] ?? "bolt://localhost:7687"

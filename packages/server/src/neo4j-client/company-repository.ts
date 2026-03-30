@@ -1,4 +1,4 @@
-import type { Company } from "@tori/shared"
+import type { Company } from "@dcf-modeling/shared"
 import type { Neo4jConnection } from "./connection.js"
 
 async function upsertCompany(

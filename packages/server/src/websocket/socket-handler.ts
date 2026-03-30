@@ -1,5 +1,5 @@
 import type { Server, Socket } from "socket.io"
-import type { PropagationStep, ShockImpact } from "@tori/shared"
+import type { PropagationStep, ShockImpact } from "@dcf-modeling/shared"
 import { EVENTS, ROOMS } from "./events.js"
 
 type GraphUpdatedPayload = {

@@ -1,4 +1,4 @@
-import type { SupplyEdge } from "@tori/shared"
+import type { SupplyEdge } from "@dcf-modeling/shared"
 import type { Neo4jConnection } from "./connection.js"
 
 function recordToEdge(props: Record<string, unknown>, from: string, to: string): SupplyEdge {

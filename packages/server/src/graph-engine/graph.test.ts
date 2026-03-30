@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest"
 import { createGraph, addNode, addEdge, removeNode, removeEdge, getNeighbors } from "./graph.js"
-import type { CompanyNode, SupplyEdge } from "@tori/shared"
+import type { CompanyNode, SupplyEdge } from "@dcf-modeling/shared"
 
 function makeNode(ticker: string): CompanyNode {
   return {

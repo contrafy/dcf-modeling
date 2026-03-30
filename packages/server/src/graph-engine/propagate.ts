@@ -1,7 +1,7 @@
 import type {
   SupplyChainGraph, CompanyNode, TariffPolicy,
   SimulationResult, ShockImpact, FinancialModelDrivers,
-} from "@tori/shared"
+} from "@dcf-modeling/shared"
 import { calculateDCF } from "../dcf-engine/dcf-calculator.js"
 import { mergeDrivers } from "../dcf-engine/merge-drivers.js"
 import { matchAffectedEdges } from "./policy-matcher.js"

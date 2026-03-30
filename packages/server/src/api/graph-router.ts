@@ -3,7 +3,7 @@ import {
   CreateCompanySchema,
   CreateSupplyEdgeSchema,
   UpdateSupplyEdgeSchema,
-} from "@tori/shared"
+} from "@dcf-modeling/shared"
 import { validateBody } from "./validation.js"
 import type { SocketHandler } from "../websocket/socket-handler.js"
 

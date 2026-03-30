@@ -1,4 +1,4 @@
-import type { FinancialModelDrivers, IncomeStatement, CashFlowStatement } from "@tori/shared"
+import type { FinancialModelDrivers, IncomeStatement, CashFlowStatement } from "@dcf-modeling/shared"
 
 function deriveCashFlow(drivers: FinancialModelDrivers, income: IncomeStatement): CashFlowStatement {
   const netIncome = income.netIncome

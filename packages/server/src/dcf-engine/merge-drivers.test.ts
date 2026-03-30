@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest"
 import { mergeDrivers } from "./merge-drivers.js"
-import type { FinancialModelDrivers } from "@tori/shared"
+import type { FinancialModelDrivers } from "@dcf-modeling/shared"
 
 const baseDrivers: FinancialModelDrivers = {
   revenue: 100_000, revenueGrowthRate: 0.10, cogsPercent: 0.40,

@@ -1,12 +1,16 @@
 {
-  "name": "tori-project",
+  "name": "dcf-modeling",
   "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "dev": "pnpm --filter @tori/server dev",
-    "build": "pnpm -r build",
-    "test": "pnpm -r test",
-    "test:watch": "pnpm -r test:watch",
-    "lint": "pnpm -r lint"
+    "dev": "bun run --cwd packages/server dev",
+    "client:dev": "bun run --cwd packages/client dev",
+    "build": "bun run --filter '*' build",
+    "test": "bun run --filter '*' test",
+    "test:watch": "bun run --filter '*' test:watch",
+    "lint": "bun run --filter '*' lint"
   },
   "engines": {
     "node": ">=22.0.0"

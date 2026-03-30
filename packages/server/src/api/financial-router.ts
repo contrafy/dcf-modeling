@@ -1,6 +1,6 @@
 import { Router, type IRouter } from "express"
-import type { FinancialModel, DCFResult } from "@tori/shared"
-import { UpdateFinancialModelSchema } from "@tori/shared"
+import type { FinancialModel, DCFResult } from "@dcf-modeling/shared"
+import { UpdateFinancialModelSchema } from "@dcf-modeling/shared"
 import { validateBody } from "./validation.js"
 import type { SocketHandler } from "../websocket/socket-handler.js"
 
