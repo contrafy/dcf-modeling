@@ -15,6 +15,7 @@
   "dependencies": {
     "@tori/shared": "workspace:*",
     "express": "^5.0.0",
+    "groq-sdk": "^1.1.2",
     "ioredis": "^5.4.0",
     "neo4j-driver": "^5.27.0",
     "socket.io": "^4.8.0",
