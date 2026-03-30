@@ -1,6 +1,6 @@
 import { Card } from "../shared/Card.js"
 import { useSelectionStore } from "../../stores/selection-store.js"
-import { useCompanyFinancials, useRunDCF } from "../../api/queries.js"
+import { useCompanyFinancials, useRunDCF, useFetchFinancialData, useRemoveCompany } from "../../api/queries.js"
 import { useSimulationStore } from "../../stores/simulation-store.js"
 
 function formatCurrency(n: number): string {
@@ -23,6 +23,9 @@ function NodeDetail() {
   const { selectedTicker } = useSelectionStore()
   const { data: financials } = useCompanyFinancials(selectedTicker)
   const runDCF = useRunDCF()
+  const fetchData = useFetchFinancialData()
+  const removeCompany = useRemoveCompany()
+  const { clearSelection } = useSelectionStore()
   const { impacts } = useSimulationStore()
 
   if (!selectedTicker) {
@@ -44,18 +47,50 @@ function NodeDetail() {
         <h3 className="text-sm font-semibold" style={{ fontFamily: "var(--font-display)", color: "var(--color-neon-cyan)" }}>
           {selectedTicker}
         </h3>
-        <button
-          onClick={() => runDCF.mutate(selectedTicker)}
-          className="text-xs px-3 py-1 rounded transition-all hover:brightness-110"
-          style={{
-            background: "rgba(57, 255, 20, 0.1)",
-            border: "1px solid rgba(57, 255, 20, 0.3)",
-            color: "var(--color-neon-green)",
-            fontFamily: "var(--font-mono)",
-          }}
-        >
-          Run DCF
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={() => fetchData.mutate(selectedTicker)}
+            disabled={fetchData.isPending}
+            className="text-xs px-3 py-1 rounded transition-all hover:brightness-110 disabled:opacity-40"
+            style={{
+              background: "rgba(0, 240, 255, 0.1)",
+              border: "1px solid rgba(0, 240, 255, 0.3)",
+              color: "var(--color-neon-cyan)",
+              fontFamily: "var(--font-mono)",
+            }}
+          >
+            {fetchData.isPending ? "Fetching..." : "Fetch Data"}
+          </button>
+          <button
+            onClick={() => runDCF.mutate(selectedTicker)}
+            disabled={runDCF.isPending}
+            className="text-xs px-3 py-1 rounded transition-all hover:brightness-110 disabled:opacity-40"
+            style={{
+              background: "rgba(57, 255, 20, 0.1)",
+              border: "1px solid rgba(57, 255, 20, 0.3)",
+              color: "var(--color-neon-green)",
+              fontFamily: "var(--font-mono)",
+            }}
+          >
+            Run DCF
+          </button>
+          <button
+            onClick={() => {
+              removeCompany.mutate(selectedTicker)
+              clearSelection()
+            }}
+            disabled={removeCompany.isPending}
+            className="text-xs px-3 py-1 rounded transition-all hover:brightness-110 disabled:opacity-40"
+            style={{
+              background: "rgba(255, 49, 49, 0.1)",
+              border: "1px solid rgba(255, 49, 49, 0.3)",
+              color: "var(--color-neon-red)",
+              fontFamily: "var(--font-mono)",
+            }}
+          >
+            Remove
+          </button>
+        </div>
       </div>
 
       {impact && (
